@@ -211,6 +211,27 @@ ejecutarTodas()
 // 9. Crea una función waitSeconds(segundos) que use setTimeout dentro de una Promesa para esperar la cantidad de segundos indicada.
 //    A continuación, usa async/await para que se espere 3 segundos antes de mostrar "Tiempo finalizado" en consola.
 
+/* version no optima
+  function waitSeconds(segundos){
+    return new Promise(resolve =>{
+      let conversion_a_ms = segundos * 1000
+      setTimeout(()=>{
+        resolve()
+      },conversion_a_ms)
+    })
+  }
+*/
+function waitSeconds(segundos) {
+  return new Promise(resolve => setTimeout(resolve, segundos * 1000))
+}
+
+async function mostrar9(segundos){
+  await waitSeconds(segundos)
+  console.log("Tiempo finalizado")
+}
+
+mostrar9(10)
+
 // 10. Crea una simulación de un cajero automático usando asincronía.
 //     - La función checkBalance() tarda 1s y devuelve un saldo de 500$.
 //     - La función withdrawMoney(amount) tarda 2s y retira dinero si hay suficiente saldo, o devuelve un error si no hay fondos.
