@@ -17,8 +17,8 @@ function imprimir(nombre){
     /*Lo que pasa aca es que declaramos una funcion, la arrow function, setTimeout la agarra, PRIMERO ESPERA 2 SEGUNDOS y luego ejecuta la funcion y en este caso la arrow function solamente llama a la callbackfn      
     }*/
   }
-saludar("juan",imprimir)
-saludarv2("pedro",imprimir)
+// saludar("juan",imprimir)
+// saludarv2("pedro",imprimir)
 // 2. Crea tres funciones task1(callback), task2(callback) y task3(callback). 
 //    Cada función debe tardar 1 segundo en ejecutarse y luego llamar al callback.
 
@@ -49,11 +49,11 @@ function task3(callback){
   },1000)
 }
 
-task1(()=>{
-  task2(()=>{
-    task3(finishJob)
-  })
-})
+// task1(()=>{
+//   task2(()=>{
+//     task3(finishJob)
+//   })
+// })
 //programar de esta forma hace que quede codigo que se vea muy mal
 
 
@@ -66,10 +66,10 @@ function isPar(numero) {
     numero % 2 == 0 ? resolve("Numero par") : reject("numero impar")
   })
 }
-const numero = isPar(3)
-numero
-  .then(result => {console.log(result)})
-  .catch((e)=>{console.log(e)})
+// const numero = isPar(3)
+// numero
+//   .then(result => {console.log(result)})
+//   .catch((e)=>{console.log(e)})
 
 // 4. Crea tres funciones que devuelvan promesas:
 //    firstTask(): tarda 1s y muestra "Primera tarea completada".
@@ -115,12 +115,12 @@ function thirdTask(){
     },1500)
   })
 }
-firstTask()
-  .then(secondTask)
-  .then(thirdTask)
-  .then(()=>{
-    console.log("TERMINO!!")
-  })
+// firstTask()
+//   .then(secondTask)
+//   .then(thirdTask)
+//   .then(()=>{
+//     console.log("TERMINO!!")
+//   })
 
   //function secondTask()
 // 5. Transforma el ejercicio anterior de Promesas en una función async/await llamada executeTasks().
@@ -134,7 +134,7 @@ firstTask()
   await secondTask()// recien ahi inicia secondTask y vuelve a pausar (2s)
   await thirdTask() // recien ahi inicia thirdTask y vuelve a pausar (1.5s)
 }
-executeTasks()
+// executeTasks()
 // 6. Crea una función getUser(id) que devuelva una promesa y simule una llamada a una API (que se demore 2s).
 //    Si el id es menor a 5, la promesa se resuelve con { id, nombre: "Usuario " + id }.
 //    Si el id es 5 o mayor, la promesa se rechaza con el mensaje "Usuario no encontrado".
@@ -159,8 +159,8 @@ async function mostrarUsuario(id){
   }
 }
 
-mostrarUsuario(4)
-mostrarUsuario(6)
+// mostrarUsuario(4)
+// mostrarUsuario(6)
 // 7. Intenta predecir el resultado de este código antes de ejecutarlo en la consola:
 //    console.log("Inicio")
 //    setTimeout(() => console.log("setTimeout ejecutado"), 0)
@@ -196,10 +196,10 @@ function promesa3(){
   })
 }
 
-Promise.all([promesa1(), promesa2(), promesa3()])
-  .then(() => {
-    console.log("Todas las promesas resueltas")
-  })
+// Promise.all([promesa1(), promesa2(), promesa3()])
+//   .then(() => {
+//     console.log("Todas las promesas resueltas")
+//   })
 
 //version con async/await
 async function ejecutarTodas() {
@@ -207,7 +207,7 @@ async function ejecutarTodas() {
   console.log("Todas las promesas resueltas")
 }
 
-ejecutarTodas()
+// ejecutarTodas()
 // 9. Crea una función waitSeconds(segundos) que use setTimeout dentro de una Promesa para esperar la cantidad de segundos indicada.
 //    A continuación, usa async/await para que se espere 3 segundos antes de mostrar "Tiempo finalizado" en consola.
 
@@ -230,7 +230,7 @@ async function mostrar9(segundos){
   console.log("Tiempo finalizado")
 }
 
-mostrar9(10)
+// mostrar9(10)
 
 // 10. Crea una simulación de un cajero automático usando asincronía.
 //     - La función checkBalance() tarda 1s y devuelve un saldo de 500$.
@@ -243,3 +243,60 @@ mostrar9(10)
 //     Operación exitosa, saldo restante: 200$
 //     Retirando 300$...
 //     Error: Fondos insuficientes
+//
+
+const esperar = (ms) => new Promise(r => setTimeout(r, ms))
+
+class CajeroAutomatico {
+  constructor() {
+    this.encendido = false
+    this.persona = null
+  }
+  prenderCajero() { this.encendido = true }
+
+  vincularPersona(p) {
+    if (!(p instanceof Persona)) throw new TypeError("Se esperaba una persona por parametro")
+    if (!this.encendido) throw new Error("Enciende el cajero primero")
+    this.persona = p
+  }
+
+  async checkBalance() {
+    await esperar(1000)
+    console.log(`Saldo disponible: ${this.persona.balance}$`)
+    return this.persona.balance
+  }
+
+  async withdrawMoney(amount) {
+    console.log(`Retirando ${amount}$...`)
+    await esperar(2000)
+    if (amount <= 0) throw new Error("Monto inválido")
+    if (amount > this.persona.balance) throw new Error("Fondos insuficientes")
+    this.persona.balance -= amount
+    return `Operación exitosa, saldo restante: ${this.persona.balance}$`
+  }
+}
+
+class Persona {
+  constructor(nombre, balance) {
+    this.nombre = nombre
+    this.balance = balance
+  }
+
+  async usarCajero(cajero, ...montos) {
+    if (!(cajero instanceof CajeroAutomatico)) throw new TypeError("Se esperaba un cajero")
+    cajero.prenderCajero()
+    cajero.vincularPersona(this)
+    await cajero.checkBalance()
+
+    for (const monto of montos) {
+      try {
+        console.log(await cajero.withdrawMoney(monto))
+      } catch (e) {
+        console.log(`Error: ${e.message}`)
+      }
+    }
+  }
+}
+
+const p1 = new Persona("Juan", 500)
+p1.usarCajero(new CajeroAutomatico(), 300,300)
