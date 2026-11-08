@@ -4,9 +4,28 @@ Vídeo: https://youtu.be/iJvLAZ8MJ2E?t=18710
 */
 
 // 1. Realiza una petición GET con fetch() a JSONPlaceholder y muestra en la consola la lista de publicaciones
-
+fetch("https://jsonplaceholder.typicode.com/posts")
+.then(response =>{
+  //se transforma los datos a json
+   return response.json()
+}).then(data =>{
+  //la respuesta que se retorno arriba en formato json
+  //ahora se muestra por consola
+  console.log(data)
+}).catch(e =>{
+  console.log("Error: ",e)
+})
 // 2. Modifica el ejercicio anterior para que verifique si la respuesta es correcta usando response.ok. Si no lo es, lanza y muestra un error
 
+fetch("https://jsonplaceholder.typicode.com/posts")
+.then(response =>{
+  if (!response.ok){
+    throw Error ("La respuesta a ido mal, Status HTTP: ", response.status)
+  }
+  return response.json()
+}).catch(e => {
+  console.log("Error: ", e)
+})
 // 3. Reescribe el ejercicio 1 usando la sintaxis async/await en lugar de promesas
 
 // 4. Realiza una petición POST a JSONPlaceholder para crear una nueva publicación. Envía un objeto con propiedades como title o body
