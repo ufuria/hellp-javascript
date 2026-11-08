@@ -169,7 +169,45 @@ mostrarUsuario(6)
 
 // 8. Crea tres funciones que devuelvan promesas con tiempos de espera distintos.
 //    A continuación, usa Promise.all() para ejecutarlas todas al mismo tiempo y mostrar "Todas las promesas resueltas" cuando terminen.
+function promesa1(){
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      console.log("promesa 1 del ej 8 procesada")
+      resolve()
+    },5000)
+  })
+}
 
+function promesa2(){
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      console.log("promesa 2 del ej 8 procesada")
+      resolve()
+    }, 6000)
+  })
+}
+
+function promesa3(){
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      console.log("promesa 3 del ej 8 procesada")
+     resolve()
+    },6500 )
+  })
+}
+
+Promise.all([promesa1(), promesa2(), promesa3()])
+  .then(() => {
+    console.log("Todas las promesas resueltas")
+  })
+
+//version con async/await
+async function ejecutarTodas() {
+  await Promise.all([promesa1(), promesa2(), promesa3()])
+  console.log("Todas las promesas resueltas")
+}
+
+ejecutarTodas()
 // 9. Crea una función waitSeconds(segundos) que use setTimeout dentro de una Promesa para esperar la cantidad de segundos indicada.
 //    A continuación, usa async/await para que se espere 3 segundos antes de mostrar "Tiempo finalizado" en consola.
 
